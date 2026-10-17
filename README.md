@@ -9,7 +9,9 @@ The issue with the typical PID implementation of thermal control in this specifi
 Coming to this conclusion, I devised a new method of thermal control, which was based on Hohmann maneuvers for orbital adjustment. In orbital mechanics, neither altitude nor velocity is the target, energy is the target. Therefore, we could develop thermal control that tracks energy addition into the system using P x t_burn = C x m_thermal x deltaT, where P is heater power, t_burn is the "maneuver" burn time, C is the calorimetry constant for the system, m_thermal is the thermal mass, and deltaT is the difference between Present Value (PV) and SetPoint (SP). 
 
 We may simplify this, using some assumptions. We can assume that the system power is relatively constant, that the thermal mass and calorimetry are roughly so as well, and this yields our control law:
+
 t_burn = k x deltaT
+
 Which appears to be proportional control until we realize that we aren't adjusting power percentage, we're adjusting total energetic input. 
 
 So the controller functions as a finite state machine with four states:
