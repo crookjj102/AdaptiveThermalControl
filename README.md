@@ -34,6 +34,7 @@ Here are comparisons against a well-tuned (at 100 deg) PID with integral clampin
 The PID and Adaptive performance are similar in the PID's tuned range, with only a few seconds' difference in settling time and little to no overshoot (both within a degree or so). 
 
 300 deg setpoint:
+
 <img width="577" height="451" alt="image" src="https://github.com/user-attachments/assets/d2324a6d-571e-442f-937e-7e009f16f3bc" />
 
 At 300 degrees, this changes, with the PID wildly overshooting (27 degrees!) despite the same parameters. The settling time of the adaptive controller remains quite good. 
