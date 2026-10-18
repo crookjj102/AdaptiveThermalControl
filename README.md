@@ -26,7 +26,7 @@ We're just using a simulated plant here, so this system starts by sending the te
 The real implementation exhibited exceptional stability across the setpoint range, exceptional accuracy compared to the PID alternatives, and a trivial setup time. This method of control also exhibited nearly perfect control when artificial disturbances were added, and this became the default method of thermal control for that facility. 
 
 Here are comparisons against a well-tuned (at 100 deg) PID with integral clamping vs this algorithm:
-100 de setpoint:
+100 deg setpoint:
 <img width="577" height="451" alt="image" src="https://github.com/user-attachments/assets/ffe75e2b-faa3-4706-bb21-c7842da19867" />
 
 
