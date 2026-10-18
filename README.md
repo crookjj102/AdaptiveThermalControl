@@ -24,3 +24,15 @@ Now this specific implementation has some interesting modifications. The origina
 We're just using a simulated plant here, so this system starts by sending the test slug every startup, and it will predict where peaks roughly should occur once the derivative settles if it's far from SP, dramatically decreasing the settling time. 
 
 The real implementation exhibited exceptional stability across the setpoint range, exceptional accuracy compared to the PID alternatives, and a trivial setup time. This method of control also exhibited nearly perfect control when artificial disturbances were added, and this became the default method of thermal control for that facility. 
+
+Here are comparisons against a well-tuned (at 100 deg) PID with integral clamping vs this algorithm:
+100 de setpoint:
+<img width="577" height="451" alt="image" src="https://github.com/user-attachments/assets/ffe75e2b-faa3-4706-bb21-c7842da19867" />
+
+
+300 deg setpoint
+<img width="577" height="451" alt="image" src="https://github.com/user-attachments/assets/73a63fc6-55d6-4855-b982-d347e52339d1" />
+
+Now, in both of these, you can see the initial slug of energy being applied, then the controller heading for the setpoint. The initial shot after tuning is intentionally conservative; it doesn't matter. It still tends to be equivalent or better performance, even with no starting knowledge of the system and a deliberately absurd first estimate. Only in the exact tuned range for the PID does this algorithm show any appreciable lack of performance. That's ok, the span of setpoints for which it will retain performance is wide. 
+
+The tradeoff for this algorithm is that for applications in which there is little power overhead available (i.e. the heat losses are nearly equivalent to available power), it inherently cannot reach as high of a temperature. This is fundamental to the way that the controller functions and would not be resolvable without introducing a different control scheme toward the upper end of the power duty. 
