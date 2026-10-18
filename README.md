@@ -27,10 +27,12 @@ The real implementation exhibited exceptional stability across the setpoint rang
 
 Here are comparisons against a well-tuned (at 100 deg) PID with integral clamping vs this algorithm:
 100 deg setpoint:
+
 <img width="577" height="451" alt="image" src="https://github.com/user-attachments/assets/ffe75e2b-faa3-4706-bb21-c7842da19867" />
 
 
-300 deg setpoint
+300 deg setpoint:
+
 <img width="577" height="451" alt="image" src="https://github.com/user-attachments/assets/73a63fc6-55d6-4855-b982-d347e52339d1" />
 
 Now, in both of these, you can see the initial slug of energy being applied, then the controller heading for the setpoint. The initial shot after tuning is intentionally conservative; it doesn't matter. It still tends to be equivalent or better performance, even with no starting knowledge of the system and a deliberately absurd first estimate. Only in the exact tuned range for the PID does this algorithm show any appreciable lack of performance. That's ok, the span of setpoints for which it will retain performance is wide. 
