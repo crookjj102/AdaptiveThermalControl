@@ -84,7 +84,10 @@ class AdaptiveController():
         while(waiting):
             await asyncio.sleep(precision)
             currentTemperature = self.currentTemperature
-            waiting = float(currentTemperature - lastTemperature)/precision >= 0
+            if(self.targetTemperature-currentTemperature>50):
+                waiting = float(currentTemperature - lastTemperature)/precision >= 0.1 # far from setpoint we let it be sloppy in the measurement
+            else:
+                waiting = float(currentTemperature - lastTemperature)/precision >= 0.01
             count += 1
             lastTemperature = currentTemperature
         return currentTemperature
@@ -104,7 +107,7 @@ class AdaptiveController():
                 self.K *= self.safePercent/self.maxPower
         else:
             self.untuned =False
-            self.K = (self.burnTime/(peakTemperature-self.prevPeak))
+            self.K = 0.8*(self.burnTime/(peakTemperature-self.prevPeak))#intentionally conservative first shot
         self.prevPeak = peakTemperature
         #print(self.K)
 
