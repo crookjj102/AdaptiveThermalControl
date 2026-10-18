@@ -28,16 +28,16 @@ The real implementation exhibited exceptional stability across the setpoint rang
 Here are comparisons against a well-tuned (at 100 deg) PID with integral clamping vs this algorithm:
 100 deg setpoint:
 
-<img width="577" height="451" alt="image" src="https://github.com/user-attachments/assets/ffe75e2b-faa3-4706-bb21-c7842da19867" />
+<img width="577" height="451" alt="image" src="https://github.com/user-attachments/assets/e8e8c8c3-f6a2-4f45-81d0-032cb9bbf3a0" />
 
-The PID and Adaptive performance are similar in the PID's tuned range, with only a few seconds' difference in settling time and little to no overshoot. 
+
+The PID and Adaptive performance are similar in the PID's tuned range, with only a few seconds' difference in settling time and little to no overshoot (both within a degree or so). 
 
 300 deg setpoint:
+<img width="577" height="451" alt="image" src="https://github.com/user-attachments/assets/d2324a6d-571e-442f-937e-7e009f16f3bc" />
 
-<img width="577" height="451" alt="image" src="https://github.com/user-attachments/assets/73a63fc6-55d6-4855-b982-d347e52339d1" />
+At 300 degrees, this changes, with the PID wildly overshooting (27 degrees!) despite the same parameters. The settling time of the adaptive controller remains quite good. 
 
-At 300 degrees, this changes, with the PID wildly overshooting despite the same parameters. The settling time of the adaptive controller remains quite good. 
-
-Now, in both of these, you can see the initial slug of energy being applied, then the controller heading for the setpoint. The initial shot after tuning is intentionally conservative; it doesn't matter. It still tends to be equivalent or better performance, even with no starting knowledge of the system and a deliberately absurd first estimate. Only in the exact tuned range for the PID does this algorithm show any appreciable lack of performance. That's ok, the span of setpoints for which it will retain performance is wide. 
+Now, in both of these, you can see the initial slug of energy being applied, then the controller learning the system and heading for the setpoint. The initial shot after tuning is intentionally conservative; it doesn't matter. It still tends to be equivalent or better performance, even with no starting knowledge of the system and a deliberately absurd first estimate. Only in the exact tuned range for the PID does this algorithm show any appreciable lack of performance. That's ok, the span of setpoints for which it will retain performance is wide. 
 
 The tradeoff for this algorithm is that for applications in which there is little power overhead available (i.e. the heat losses are nearly equivalent to available power), it inherently cannot reach as high of a temperature. This is fundamental to the way that the controller functions and would not be resolvable without introducing a different control scheme toward the upper end of the power duty. 
