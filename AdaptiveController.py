@@ -158,6 +158,9 @@ class AdaptiveController():
             )
 '''
 An array that stores its own sum for O(1) rolling averaging. 
+
+This was a method for filtering sensor readings, as I was injecting noise into the sensor readings to test the response. 
+Obviously, for demoing the controller, it's best to show what happens when it gets clean data, as normally things are electrically filtered. 
 '''
 
 class MovingAverageArray:
