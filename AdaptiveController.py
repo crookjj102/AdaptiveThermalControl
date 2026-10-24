@@ -45,6 +45,7 @@ class AdaptiveController():
         self.safePercent = safe_percent
         self.currentTemperature = self.zone.currentTemperature # Current temperature of the zone
         self.timeDilation = timeDilation
+        self.K = 0.40 # in case we want to play with what this can do with prior knowledge of the system. 
  
 
     
