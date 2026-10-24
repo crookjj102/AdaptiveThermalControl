@@ -30,6 +30,9 @@ The PID and Adaptive performance are similar in the PID's tuned range, with only
 300 deg setpoint, PID has clamping:
 <img width="625" height="479" alt="image" src="https://github.com/user-attachments/assets/9cb79332-4204-4f86-95b1-70b4924f8f64" />
 
+300 deg setpoint, adaptive has prior knowledge of the system:
+<img width="625" height="479" alt="image" src="https://github.com/user-attachments/assets/74bee96a-276c-4571-9974-2b1edb144df4" />
+
 
 Now, in this example, you can see the initial slug of energy being applied, then the controller learning the system and heading for the setpoint. The initial shot after tuning is intentionally conservative; it doesn't matter. It still tends to be equivalent or better performance, even with no starting knowledge of the system and a deliberately absurd first estimate. Only in the exact tuned range for the PID does this algorithm show any appreciable lack of performance. That's ok, the span of setpoints for which it will retain performance is wide. Even with no initial understanding of the system, and the PID possessing anti-windup, the adaptive beats PID to the setpoint and maintains a much higher degree of accuracy. 
 
