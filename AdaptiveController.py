@@ -29,7 +29,7 @@ from Heater import Heater
 from Zone import improvedZone
 
 class AdaptiveController():
-    def __init__(self, zone, SP, maxPower, precision= 0.1, tuneTime = 0.2, safe_temp =300, safe_percent=30):
+    def __init__(self, zone, SP, maxPower, precision= 0.1, tuneTime = 0.2, safe_temp =300, safe_percent=30, timeDilation = 1):
         self.zone = zone
         self.targetTemperature = SP  # Setpoint temperature  
         self.burnTime = 0.0  # Time to burn the heater
@@ -41,13 +41,12 @@ class AdaptiveController():
         self.untuned = True
         self.crossedSafety = False
         self.safeTemp = safe_temp
-        self.tuneTime = tuneTime
+        self.tuneTime = tuneTime/timeDilation
         self.safePercent = safe_percent
         self.currentTemperature = self.zone.currentTemperature # Current temperature of the zone
-        self.Kp = 0 # Proportional parameter
-        self.Ki = 0 # Integral paramete
-        self.K = 0 # Tuning parameter
-        
+        self.timeDilation = timeDilation
+ 
+
     
     def determineIfCrossed(self): # determines if we've crossed the steam danger zone on the heater. 
         if self.prevPeak<self.safeTemp and self.currentTemperature>self.safeTemp and not self.crossedSafety:
@@ -66,7 +65,7 @@ class AdaptiveController():
                 deltaT = self.safeTemp - self.currentTemperature    
             else:
                 deltaT = self.targetTemperature - self.currentTemperature
-            self.burnTime = self.K * deltaT
+            self.burnTime = self.K * deltaT/self.timeDilation
         
 
     
@@ -80,26 +79,26 @@ class AdaptiveController():
         lastTemperature = self.currentTemperature-1
         currentTemperature = self.currentTemperature
         waiting = True
-        count = 0
+
         while(waiting):
             await asyncio.sleep(precision)
             currentTemperature = self.currentTemperature
             if(self.targetTemperature-currentTemperature>50):
-                waiting = float(currentTemperature - lastTemperature)/precision >= 0.1 # far from setpoint we let it be sloppy in the measurement
+                waiting = float(currentTemperature - lastTemperature)/(precision*self.timeDilation) >= 0.1 # far from setpoint we let it be sloppy in the measurement
             else:
-                waiting = float(currentTemperature - lastTemperature)/precision >= 0.01
-            count += 1
+                waiting = float(currentTemperature - lastTemperature)/(precision*self.timeDilation) >= 0.01
+
             lastTemperature = currentTemperature
         return currentTemperature
-            #print(self.zone.currentTemperature, (currentTemperature-lastTemperature)/precision, self.burnTime)
-        return currentTemperature
-    
+        
     def updateSystemEstimate(self, peakTemperature): 
+        
         if not self.untuned:    
             if self.prevPeak<self.safeTemp and not self.untuned:
                 tempError = self.safeTemp - peakTemperature
                 errorPercent =  float(tempError/self.safeTemp) 
             else:
+                #errorPercent = float((peakTemperature-self.prevPeak)/(self.targetTemperature-self.prevPeak))
                 tempError = self.targetTemperature - peakTemperature
                 errorPercent =  float(tempError/self.targetTemperature)   
             self.K *= float(1.0 + errorPercent)
@@ -107,12 +106,12 @@ class AdaptiveController():
                 self.K *= self.safePercent/self.maxPower
         else:
             self.untuned =False
-            self.K = 0.8*(self.burnTime/(peakTemperature-self.prevPeak))#intentionally conservative first shot
+            self.K = 0.9*(self.burnTime*self.timeDilation/(peakTemperature-self.prevPeak))#intentionally conservative first shot
         self.prevPeak = peakTemperature
         #print(self.K)
-
+    
     async def runTemperature(self):
-        tempFilter = MovingAverageArray(500)
+        tempFilter = MovingAverageArray(5)
         while True:
             await asyncio.sleep(self.loopPrecision)
             tempFilter.insert(self.zone.calculateCurrentTemperature(self.loopPrecision))

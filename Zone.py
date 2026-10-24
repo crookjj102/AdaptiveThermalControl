@@ -6,7 +6,7 @@ import math
 import random
 
 class Zone():
-    def __init__(self, heater, ambientTemp, mass, calorimetryConst, diameter, length):
+    def __init__(self, heater, ambientTemp, mass, calorimetryConst, diameter, length, timeDilation):
         self.heater = heater
         self.ambientTemp = ambientTemp
         self.mass = mass
@@ -16,6 +16,7 @@ class Zone():
         self.length = length
         self.totalEnergy = 0
         self.conductiveHeatLossRate = 0
+        self.timeDilation = timeDilation
 
         self.surfaceArea = self.diameter * self.length*math.pi
 
@@ -69,6 +70,7 @@ class Zone():
         h_total = self.calculateHTCoeff()
         deltaT = self.currentTemperature - self.ambientTemp
         return h_total*self.surfaceArea*deltaT*dt
+    
     def conductiveHeatLoss(self, lossRate):
         self.conductiveHeatLossRate = lossRate
 
@@ -80,11 +82,11 @@ class Zone():
             return 0
 
     def calculateCurrentTemperature(self, dt):
-        self.currentTemperature += (self.calculateHeatGain(dt)-self.calculateHeatLoss(dt)-self.conductiveHeatLossRate*dt)/(self.mass*self.calorimetryConst)
+        self.currentTemperature += (self.calculateHeatGain(dt*self.timeDilation)-self.calculateHeatLoss(dt*self.timeDilation)-self.conductiveHeatLossRate*dt*self.timeDilation)/(self.mass*self.calorimetryConst)
         return self.currentTemperature
 
 class improvedZone():
-    def __init__(self, heater, ambientTemp, mass, calorimetryConst, diameter, length, safetytemp, safetyPercent):
+    def __init__(self, heater, ambientTemp, mass, calorimetryConst, diameter, length, safetytemp, safetyPercent, timeDilation):
         self.heater = heater
         self.ambientTemp = ambientTemp
         self.mass = mass
@@ -93,14 +95,15 @@ class improvedZone():
         self.diameter = diameter
         self.length = length
         self.totalEnergy = 0
-        self.heaterZone = Zone(heater, ambientTemp, mass/2, calorimetryConst, diameter, length/2)
+        self.heaterZone = Zone(heater, ambientTemp, mass/2, calorimetryConst, diameter, length/2, timeDilation)
         self.maxflux = heater.powerCapacity
         self.heatProxy = Heater.Heater(self.maxflux)
-        self.sensorZone = Zone(self.heatProxy, ambientTemp, mass/2, calorimetryConst, diameter, length/2)
+        self.sensorZone = Zone(self.heatProxy, ambientTemp, mass/2, calorimetryConst, diameter, length/2, timeDilation)
         self.area = 0.25*3.14159*self.diameter**2
         self.thermalConductivity = 31
         self.safetyPercent = safetyPercent
         self.safetytemp = safetytemp
+        self.timeDilation = timeDilation
 
     def heaterOn(self, power):
         #micah heater bands require low power below 300 to prevent popping holes in them from steam pockets.

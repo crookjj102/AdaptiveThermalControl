@@ -25,12 +25,12 @@ async def update_graph(x_values, y1_values, y2_values):
         plt.pause(0.01)
         await asyncio.sleep(0.09)
 
-async def monitorZones(zone1, zone2, temps1, temps2, times, currTime):
+async def monitorZones(zone1, zone2, temps1, temps2, times, currTime, timeDilation):
     while(True):
         await asyncio.sleep(.1)
         temp1 = "%3.2f" % zone1.currentTemperature
         temp2 = "%3.2f" % zone2.currentTemperature
-        times.append(currTime)
+        times.append(currTime*timeDilation)
         currTime += .1
         temps1.append(zone1.currentTemperature)
         temps2.append(zone2.currentTemperature)
@@ -50,17 +50,18 @@ async def main():
 
     safetytemp = 00
     safetyPercent = 40
+    timeDilation = 10.0
 
     tuneTime = 3
  
     #create PID controlled zone
     PIDHeater = Heater(power)
-    PIDZone = Zone(PIDHeater, ambient, mass, calorimetryConst,diameter,length, safetytemp, safetyPercent)
-    PIDController = PID(PIDZone, setpoint, maxPower, 3, 1, 40, 0.01, True, 20)#tuned to 100 C 
+    PIDZone = Zone(PIDHeater, ambient, mass, calorimetryConst,diameter,length, safetytemp, safetyPercent, timeDilation)
+    PIDController = PID(PIDZone, setpoint, maxPower, 3, 1, 40, 0.01, True, 20, timeDilation)#tuned to 100 C 
 
     adaptiveHeater = Heater(power)
-    adaptiveZone = Zone(adaptiveHeater, ambient, mass, calorimetryConst,diameter,length, safetytemp, safetyPercent)
-    adaptiveController = AdaptiveController(adaptiveZone, setpoint, maxPower,0.01, tuneTime, safetytemp, safetyPercent)
+    adaptiveZone = Zone(adaptiveHeater, ambient, mass, calorimetryConst,diameter,length, safetytemp, safetyPercent, timeDilation)
+    adaptiveController = AdaptiveController(adaptiveZone, setpoint, maxPower,0.01, tuneTime, safetytemp, safetyPercent, timeDilation)
 
     # create graph
     x_values = []
@@ -74,7 +75,7 @@ async def main():
     await asyncio.gather(
         adaptiveController.run(), 
         PIDController.run(), 
-       monitorZones(PIDZone, adaptiveZone, y_pid,y_adaptive, x_values, currTime),
+       monitorZones(PIDZone, adaptiveZone, y_pid,y_adaptive, x_values, currTime, timeDilation),
         update_graph(x_values, y_pid, y_adaptive)
    )
         
