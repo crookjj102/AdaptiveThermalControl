@@ -29,7 +29,7 @@ from Heater import Heater
 from Zone import improvedZone
 
 class AdaptiveController():
-    def __init__(self, zone, SP, maxPower, precision= 0.1, tuneTime = 0.2, safe_temp =300, safe_percent=30, timeDilation = 1):
+    def __init__(self, zone, SP, maxPower, precision= 0.1, tuneTime = 0.2, safe_temp =300, safe_percent=30, timeDilation = 1.0, requireTuning = True, startingK = 0.40):
         self.zone = zone
         self.targetTemperature = SP  # Setpoint temperature  
         self.burnTime = 0.0  # Time to burn the heater
@@ -38,14 +38,14 @@ class AdaptiveController():
         self.burnTime = 0
         self.state = ''
         self.prevPeak = 0
-        self.untuned = True
+        self.untuned = requireTuning # set this to false if you want to see performance without initial learning. 
         self.crossedSafety = False
         self.safeTemp = safe_temp
         self.tuneTime = tuneTime/timeDilation
         self.safePercent = safe_percent
         self.currentTemperature = self.zone.currentTemperature # Current temperature of the zone
         self.timeDilation = timeDilation
-        self.K = 0.40 # in case we want to play with what this can do with prior knowledge of the system. 
+        self.K = startingK # in case we want to play with what this can do with prior knowledge of the system. 
  
 
     

@@ -35,33 +35,37 @@ async def monitorZones(zone1, zone2, temps1, temps2, times, currTime, timeDilati
         temps1.append(zone1.currentTemperature)
         temps2.append(zone2.currentTemperature)
  
-        print("Zone1 Temperature: ", temp1, "Zone 1 Power: ", int(zone1.heaterZone.heater.powerLevel), "Zone2 Temperature: ", temp2, "Zone 2 Power: ", int(zone2.heaterZone.heater.powerLevel))
+        #print("Zone1 Temperature: ", temp1, "Zone 1 Power: ", int(zone1.heaterZone.heater.powerLevel), "Zone2 Temperature: ", temp2, "Zone 2 Power: ", int(zone2.heaterZone.heater.powerLevel))
 
 
 async def main():
     power = 2500.0
     ambient = 35.0
-    mass = 15
+    mass = 5
     calorimetryConst = 36.0
     diameter = 0.2
     length = 0.09 
-    setpoint = 300.0
+    setpoint = 400.0
     maxPower = 100
 
     safetytemp = 00
     safetyPercent = 40
-    timeDilation = 10.0
+    timeDilation = 30.0
+    
+    requireTuning = True
+    startingK = 0.41
+    tuneTime = 1
 
-    tuneTime = 3
+    enableDegradation = False
  
     #create PID controlled zone
-    PIDHeater = Heater(power)
+    PIDHeater = Heater(power, enableDegradation)
     PIDZone = Zone(PIDHeater, ambient, mass, calorimetryConst,diameter,length, safetytemp, safetyPercent, timeDilation)
-    PIDController = PID(PIDZone, setpoint, maxPower, 3, 1, 40, 0.01, True, 20, timeDilation)#tuned to 100 C 
+    PIDController = PID(PIDZone, setpoint, maxPower, 5, .001, 20, 0.01, False, 5, timeDilation)#tuned to 100 C 
 
-    adaptiveHeater = Heater(power)
+    adaptiveHeater = Heater(power, enableDegradation)
     adaptiveZone = Zone(adaptiveHeater, ambient, mass, calorimetryConst,diameter,length, safetytemp, safetyPercent, timeDilation)
-    adaptiveController = AdaptiveController(adaptiveZone, setpoint, maxPower,0.01, tuneTime, safetytemp, safetyPercent, timeDilation)
+    adaptiveController = AdaptiveController(adaptiveZone, setpoint, maxPower,0.01, tuneTime, safetytemp, safetyPercent, timeDilation, requireTuning, startingK)
 
     # create graph
     x_values = []
