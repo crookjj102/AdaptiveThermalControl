@@ -37,3 +37,10 @@ The PID and Adaptive performance are similar in the PID's tuned range, with only
 Now, in this example, you can see the initial slug of energy being applied, then the controller learning the system and heading for the setpoint. The initial shot after tuning is intentionally conservative; it doesn't matter. It still tends to be equivalent or better performance, even with no starting knowledge of the system and a deliberately absurd first estimate. Only in the exact tuned range for the PID does this algorithm show any appreciable lack of performance. That's ok, the span of setpoints for which it will retain performance is wide. Even with no initial understanding of the system, and the PID possessing anti-windup, the adaptive beats PID to the setpoint and maintains a much higher degree of accuracy. 
 
 The tradeoff for this algorithm is that for applications in which there is little power overhead available (i.e. the heat losses are nearly equivalent to available power), it inherently cannot reach as high of a temperature. This is fundamental to the way that the controller functions and would not be resolvable without introducing a different control scheme toward the upper end of the power duty. 
+
+Now, one of the biggest advantages to this approach was the fact that heater bands on the presses could have more degradation and still be useful. Below is a graph of both PID and adaptive controllers when the heater degrades by one watt per simulation tick: 
+
+<img width="625" height="479" alt="image" src="https://github.com/user-attachments/assets/c460ef19-1cb7-4714-833b-638872e01a17" />
+
+As you can see, the PID loses control authority rapidly, and the adaptive controller maintains control for far longer before also losing control of the situation. 
+
