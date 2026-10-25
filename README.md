@@ -44,5 +44,5 @@ Now, one of the biggest advantages to this approach was the fact that heater ban
 
 <img width="625" height="479" alt="image" src="https://github.com/user-attachments/assets/c460ef19-1cb7-4714-833b-638872e01a17" />
 
-As you can see, the PID loses control authority rapidly, and the adaptive controller maintains control for far longer before also losing control of the situation. Noise is due to the exceptionally high time dilation used (it's rather slow and I'm rather impatient). 
+As you can see, the PID loses control authority rapidly, and the adaptive controller maintains control for far longer before also losing control of the situation. Noise is due to the exceptionally high time dilation used (it's rather slow and I'm rather impatient). Note that integral clamping was disabled for the PID in this test to help it succeed. 
 
