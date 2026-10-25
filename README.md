@@ -28,9 +28,11 @@ The real implementation exhibited exceptional stability across the setpoint rang
 The PID and Adaptive performance are similar in the PID's tuned range, with only a few seconds' difference in settling time and little to no overshoot (both within a degree or so). 
 
 300 deg setpoint, PID has clamping:
+
 <img width="625" height="479" alt="image" src="https://github.com/user-attachments/assets/9cb79332-4204-4f86-95b1-70b4924f8f64" />
 
 300 deg setpoint, adaptive has prior knowledge of the system:
+
 <img width="625" height="479" alt="image" src="https://github.com/user-attachments/assets/74bee96a-276c-4571-9974-2b1edb144df4" />
 
 
@@ -42,5 +44,5 @@ Now, one of the biggest advantages to this approach was the fact that heater ban
 
 <img width="625" height="479" alt="image" src="https://github.com/user-attachments/assets/c460ef19-1cb7-4714-833b-638872e01a17" />
 
-As you can see, the PID loses control authority rapidly, and the adaptive controller maintains control for far longer before also losing control of the situation. 
+As you can see, the PID loses control authority rapidly, and the adaptive controller maintains control for far longer before also losing control of the situation. Noise is due to the exceptionally high time dilation used (it's rather slow and I'm rather impatient). 
 
