@@ -31,7 +31,8 @@ class PID():
         self.integral += error*self.loopPrecision*self.timeDilation
         #clamp integral term to prevent windup
         integralTerm = float(self.Ki * self.integral)#*self.loopPrecision)
-        
+        if self.hasClamping and abs(self.currentTemperature-self.SP)<1:
+            self.integral = 0
         if integralTerm>=self.maxPower*self.clampPercent and self.hasClamping:
             integralTerm = self.maxPower/(self.clampPercent)
         return integralTerm

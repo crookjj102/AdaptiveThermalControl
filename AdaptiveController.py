@@ -112,7 +112,7 @@ class AdaptiveController():
         #print(self.K)
     
     async def runTemperature(self):
-        tempFilter = MovingAverageArray(5)
+        tempFilter = MovingAverageArray(1)
         while True:
             await asyncio.sleep(self.loopPrecision)
             tempFilter.insert(self.zone.calculateCurrentTemperature(self.loopPrecision))
