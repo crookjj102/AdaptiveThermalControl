@@ -34,7 +34,7 @@ async def monitorZones(zone1, zone2, temps1, temps2, times, currTime, timeDilati
         currTime += .1
         temps1.append(zone1.currentTemperature)
         temps2.append(zone2.currentTemperature)
- 
+
         #print("Zone1 Temperature: ", temp1, "Zone 1 Power: ", int(zone1.heaterZone.heater.powerLevel), "Zone2 Temperature: ", temp2, "Zone 2 Power: ", int(zone2.heaterZone.heater.powerLevel))
 
 
@@ -52,12 +52,12 @@ async def main():
     safetyPercent = 40
     timeDilation = 10.0
     
-    requireTuning = False
-    startingK = 0.1
+    requireTuning = True
+    startingK = 0.12
     tuneTime = 1
 
     enableDegradation = True
- 
+
     #create PID controlled zone
     PIDHeater = Heater(power, enableDegradation)
     PIDZone = Zone(PIDHeater, ambient, mass, calorimetryConst,diameter,length, safetytemp, safetyPercent, timeDilation)
@@ -79,9 +79,9 @@ async def main():
     await asyncio.gather(
         adaptiveController.run(), 
         PIDController.run(), 
-       monitorZones(PIDZone, adaptiveZone, y_pid,y_adaptive, x_values, currTime, timeDilation),
+        monitorZones(PIDZone, adaptiveZone, y_pid,y_adaptive, x_values, currTime, timeDilation),
         update_graph(x_values, y_pid, y_adaptive)
-   )
+    )
         
 
 asyncio.run(main())

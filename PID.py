@@ -33,8 +33,11 @@ class PID():
         integralTerm = float(self.Ki * self.integral)#*self.loopPrecision)
         if self.hasClamping and abs(self.currentTemperature-self.SP)<1:
             self.integral = 0
-        if integralTerm>=self.maxPower*self.clampPercent and self.hasClamping:
-            integralTerm = self.maxPower/(self.clampPercent)
+        if abs(integralTerm)>=self.maxPower/self.clampPercent and self.hasClamping:
+            if(integralTerm>0):
+                integralTerm = self.maxPower/(self.clampPercent)
+            elif(integralTerm<0):
+                integralTerm = -self.maxPower/(self.clampPercent)
         return integralTerm
 
     def output(self, powerLevel):
@@ -61,7 +64,12 @@ class PID():
             derivativeTerm = self.derivativeTerm(error, self.prev_error)
             integralTerm = self.integralTerm(error)
             output = proportionalTerm + derivativeTerm + integralTerm
+            if output<0:
+                output = 0
+            elif output>self.maxPower:
+                output = self.maxPower
             self.output(output)
+            #print(output)
             await asyncio.sleep(self.loopPrecision)
 
     async def run(self):
