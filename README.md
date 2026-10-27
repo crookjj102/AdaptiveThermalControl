@@ -42,7 +42,8 @@ The tradeoff for this algorithm is that for applications in which there is littl
 
 Now, one of the biggest advantages to this approach was the fact that heater bands on the presses could have more degradation and still be useful. Below is a graph of both PID and adaptive controllers when the heater degrades by one watt per simulation tick: 
 
-<img width="625" height="479" alt="image" src="https://github.com/user-attachments/assets/c460ef19-1cb7-4714-833b-638872e01a17" />
+<img width="784" height="547" alt="image" src="https://github.com/user-attachments/assets/8ad104d7-bc4a-4151-85bc-60b6ecd0b195" />
 
-As you can see, the PID loses control authority rapidly, and the adaptive controller maintains control for far longer before also losing control of the situation. Noise is due to the exceptionally high time dilation used (it's rather slow and I'm rather impatient). Note that integral clamping was disabled for the PID in this test to help it succeed. 
+
+As you can see, the PID loses control authority more rapidly, and the adaptive controller maintains control for longer before also losing control of the situation. Noise is due to the exceptionally high time dilation used (it's rather slow and I'm rather impatient). Note that integral clamping was disabled for the PID in this test to help it succeed. 
 
