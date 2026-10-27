@@ -45,5 +45,5 @@ Now, one of the biggest advantages to this approach was the fact that heater ban
 <img width="784" height="547" alt="image" src="https://github.com/user-attachments/assets/8ad104d7-bc4a-4151-85bc-60b6ecd0b195" />
 
 
-As you can see, the PID loses control authority more rapidly, and the adaptive controller maintains control for longer before also losing control of the situation. Noise is due to the exceptionally high time dilation used (it's rather slow and I'm rather impatient). Note that integral clamping was disabled for the PID in this test to help it succeed. 
+As you can see, the PID loses control authority more rapidly, and the adaptive controller maintains control for longer before also losing control of the situation. Noise is due to the exceptionally high time dilation used (it's rather slow and I'm rather impatient). Note that integral clamping was disabled for the PID in this test to help it succeed. The other interesting thing is that the failure mode is more sudden, which, in process-critical applications, is a desirable trait. 
 
