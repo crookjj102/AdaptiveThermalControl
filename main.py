@@ -59,11 +59,11 @@ async def main():
     enableDegradation = True
 
     #create PID controlled zone
-    PIDHeater = Heater(power, enableDegradation)
+    PIDHeater = Heater(power, enableDegradation, "PID")
     PIDZone = Zone(PIDHeater, ambient, mass, calorimetryConst,diameter,length, safetytemp, safetyPercent, timeDilation)
-    PIDController = PID(PIDZone, setpoint, maxPower, 5, 10, 50, 0.01, True, 20, timeDilation)#tuned to 100 C 
+    PIDController = PID(PIDZone, setpoint, maxPower, 5, 100, 50, 0.01, True, 20, timeDilation)#tuned to 100 C 
 
-    adaptiveHeater = Heater(power, enableDegradation)
+    adaptiveHeater = Heater(power, enableDegradation, "Adaptive")
     adaptiveZone = Zone(adaptiveHeater, ambient, mass, calorimetryConst,diameter,length, safetytemp, safetyPercent, timeDilation)
     adaptiveController = AdaptiveController(adaptiveZone, setpoint, maxPower,0.01, tuneTime, safetytemp, safetyPercent, timeDilation, requireTuning, startingK)
 

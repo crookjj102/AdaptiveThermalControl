@@ -75,11 +75,11 @@ class Zone():
         self.conductiveHeatLossRate = lossRate
 
     def calculateHeatGain(self, dt):
-        if self.heater.heaterIsOn:
-            energyContributed = self.heater.getEnergyContributed(dt)
-            return energyContributed
-        else:
-            return 0
+        #if self.heater.heaterIsOn:
+        energyContributed = self.heater.getEnergyContributed(dt)
+        return energyContributed
+        #else:
+        #    return 0
 
     def calculateCurrentTemperature(self, dt):
         self.currentTemperature += (self.calculateHeatGain(dt*self.timeDilation)-self.calculateHeatLoss(dt*self.timeDilation)-self.conductiveHeatLossRate*dt*self.timeDilation)/(self.mass*self.calorimetryConst)

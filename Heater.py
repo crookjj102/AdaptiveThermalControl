@@ -1,10 +1,10 @@
 class Heater():
-    def __init__(self, powerCapacity, enableDegradation = False):
+    def __init__(self, powerCapacity, enableDegradation = False, name= "foo"):
         self.powerCapacity = powerCapacity
         self.heaterIsOn = False
         self.powerLevel = 0
         self.enableDegradation = enableDegradation
-        
+        self.name = name
 
 
     def heaterOn(self, powerLevel_Percent):
@@ -27,6 +27,7 @@ class Heater():
     def getEnergyContributed(self, dt):
         if(self.enableDegradation and self.powerCapacity>1):
                 self.powerCapacity -= 1
+                print(self.name+" Degradation: Power Capacity is now", self.powerCapacity)
         return float(self.powerLevel * dt * self.powerCapacity / 100.0)
 
     def getPowerCapacity(self):
